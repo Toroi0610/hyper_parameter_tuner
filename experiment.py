@@ -16,11 +16,12 @@ neptune.init('User/House_Price')
 # set Train/Test file path
 TRAIN_FILEPATH = '/data/train.csv'
 TEST_FILEPATH = '/data/test.csv'
+TARGET_LIST = ["SalePrice"]
 with neptune.create_experiment():
     log_data_version(TRAIN_FILEPATH)
     log_data_version(TEST_FILEPATH)
 
-training_data = data_loader(TRAIN_FILEPATH)
+training_data = data_loader(TRAIN_FILEPATH, TARGET_LIST)
 test_data = data_loader(TEST_FILEPATH)
 
 neptune.create_experiment('House_Price')
