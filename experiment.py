@@ -21,8 +21,8 @@ with neptune.create_experiment():
     log_data_version(TRAIN_FILEPATH)
     log_data_version(TEST_FILEPATH)
 
-training_data = data_loader(TRAIN_FILEPATH, TARGET_LIST)
-test_data = data_loader(TEST_FILEPATH)
+training_data, training_target = data_loader(TRAIN_FILEPATH, TARGET_LIST)
+test_data, _ = data_loader(TEST_FILEPATH)
 
 neptune.create_experiment('House_Price')
 neptune_callback = optuna_utils.NeptuneCallback()
