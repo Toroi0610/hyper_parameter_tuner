@@ -1,10 +1,9 @@
 import optuna
-from model.lightgbm_0.model import learning
 
-def objective(trial, model, data, target, metric, validation_size=0.25):
+def create_objective(trial, learning, data, target, metric, validation_size=0.25):
     train_x, validation_x, train_y, validation_y = train_test_split(data, target, test_size=validation_size)
 
-    param = {
+    params = {
         'objective': 'binary',
         'metric': 'binary_logloss',
         'num_leaves': trial.suggest_int('num_leaves', 2, 256),

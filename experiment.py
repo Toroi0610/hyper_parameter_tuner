@@ -2,6 +2,13 @@
 import neptune
 # File data version
 from neptunecontrib.versioning.data import log_data_version
+# File Loader
+from data_loader import data_loader
+# Hyperparameter Tuner
+from hyperparameter_optimizer import create_objective
+# Model
+from model.lightgbm_0.model import learning
+
 
 # set UserName/ExperimentName
 neptune.init('User/House_Price')
@@ -13,3 +20,14 @@ with neptune.create_experiment():
     log_data_version(TRAIN_FILEPATH)
     log_data_version(TEST_FILEPATH)
 
+training_data = data_loader(TRAIN_FILEPATH)
+test_data = data_loader(TEST_FILEPATH)
+
+neptune.create_experiment('House_Price')
+neptune_callback = optuna_utils.NeptuneCallback()
+
+objective = lambda trail : create_objective(trail, learning, training_data, target, metric, validation_size=0.25)
+
+study = optuna.create_study(direction='maximize')
+study.optimize(objective, n_trials=100, callbacks=[neptune_callback])
+optuna_utils.log_study(study)
